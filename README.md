@@ -22,8 +22,8 @@ This program requires Python 3.6 or above to run.
 
     Create a virtual environment to isolate our package dependencies locally
     ```
-    python3 -m venv env
-    source env/bin/activate
+    python3 -m venv paranuara_env
+    source paranuara_env/bin/activate
     ```
 
  3. Install Paranuara
