@@ -1,10 +1,16 @@
-from django.http import JsonResponse
 from rest_framework.decorators import api_view
 from paranuara.models import Company, People, Friend
 from paranuara import serializers
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.reverse import reverse
+
+
+def success_response(data):
+    return {"status": "Success", "data": data}
+
+
+def fail_response(error):
+    return {"status": "Fail", "error": error}
 
 
 @api_view(['GET'])
@@ -15,7 +21,7 @@ def company_list(request):
     if request.method == 'GET':
         companies = Company.objects.all()
         serializer = serializers.CompanyListSerializer(companies, many=True)
-        return Response(serializer.data)
+        return Response(success_response(serializer.data))
 
 
 @api_view(['GET'])
@@ -29,19 +35,18 @@ def company_detail(request, pk):
         company = Company.objects.get(pk=pk)
 
     except Company.DoesNotExist:
-        content = {"status": "Fail", "error": "Company does not exist!"}
+        content = fail_response("Company does not exist!")
         return Response(content, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         serializer = serializers.CompanyDetailSerializer(company)
-        content = {"status": "Success", "data": serializer.data}
-        return Response(content, status=status.HTTP_200_OK)
+        return Response(success_response(serializer.data), status=status.HTTP_200_OK)
 
 
 def get_friends_in_common(ids, eye_color, has_died):
     list_ids = ids.split(",")
     # For this requirement only accept 2 people
     if len(list_ids) < 2:
-        content = {"status": "Fail", "error": "Only accept 2 people!"}
+        content = fail_response("Only accept 2 people!")
         return Response(content, status=status.HTTP_204_NO_CONTENT)
 
     friend_list_people_1 = Friend.objects.filter(people_index__index=list_ids[0]).values_list("friend_index__index",
@@ -58,8 +63,8 @@ def get_friends_in_common(ids, eye_color, has_died):
     response_peoples = serializers.PeopleSerializerSimple(data=peoples, many=True)
     response_peoples.is_valid()
 
-    content = {"status": "Success", "data": {"peoples": response_peoples.data,
-                                             "common_friends": response_common_friends.data}}
+    content = success_response({"peoples": response_peoples.data,
+                                "common_friends": response_common_friends.data})
     return content
 
 
@@ -77,7 +82,7 @@ def people_friends_in_common(request):
         try:
             content = get_friends_in_common(ids, eye_color, has_died)
         except Exception:
-            content = {"status": "Fail", "error": "Bad request!"}
+            content = fail_response("Bad request!")
             return Response(content, status=status.HTTP_400_BAD_REQUEST)
         return Response(content, status=status.HTTP_200_OK)
 
@@ -92,9 +97,8 @@ def people_detail(request, pk):
     try:
         people = People.objects.get(pk=pk)
     except People.DoesNotExist:
-        content = {"status": "Fail", "error": "People not found!"}
+        content = fail_response("People not found!")
         return Response(content, status=status.HTTP_404_NOT_FOUND)
     if request.method == 'GET':
         serializer = serializers.PeopleSerializerDetail(people)
-        content = {"status": "Success", "data": serializer.data}
-        return Response(content, status=status.HTTP_200_OK)
+        return Response(success_response(serializer.data), status=status.HTTP_200_OK)
