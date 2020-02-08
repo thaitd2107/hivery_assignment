@@ -24,7 +24,6 @@ This program requires Python 3.6 or above to run.
 
     ```commandline
     git clone https://github.com/thaitd2107/hivery_assignment.git
-    cd hivery_assignment
     ```
 
     Create a virtual environment to isolate our package dependencies locally
@@ -35,6 +34,10 @@ This program requires Python 3.6 or above to run.
 
  3. Install Paranuara
 
+    Go to cd hivery_assignment location
+    ```commandline
+    cd hivery_assignment
+    ```
     ```commandline
     pip install -r requirements
     ```
