@@ -20,9 +20,16 @@ This program requires Python 3.6 or above to run.
 
  2. Choose a folder to install. Create and activate new virtualenv.
 
-    Create a virtual environment to isolate our package dependencies locally
+    Clone this project:
+
+    ```commandline
+    git clone https://github.com/thaitd2107/hivery_assignment.git
+    cd hivery_assignment
     ```
-    python3 -m venv paranuara_env
+
+    Create a virtual environment to isolate our package dependencies locally
+    ```commandline
+    virtualenv paranuara_env
     source paranuara_env/bin/activate
     ```
 
