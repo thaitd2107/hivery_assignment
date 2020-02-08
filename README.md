@@ -9,7 +9,7 @@ This program requires Python 3.6 or above to run.
     Install pip, if you don't already have:
 
     ```commandline
-    python install pip
+    easy_install pip
     ```
 
     Install virtualenv if you don't already have
